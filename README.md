@@ -1,88 +1,105 @@
-# Proto Contracts - Zenly Clone
+# Zenly Protobuf Contracts
 
-Централизованный репозиторий gRPC контрактов для микросервисной архитектуры.
+Централизованный репозиторий gRPC контрактов для микросервисной архитектуры проекта Zenly Clone.
 
-## Автоматизация
+## Структура репозитория
 
-Репозиторий использует **GitHub Actions** для полной автоматизации:
-
-### 1. Автоматическая генерация кода
-**Workflow**: [`.github/workflows/generate-code.yml`](.github/workflows/generate-code.yml)
-
-При изменении `.proto` файлов:
-- Автоматически запускается линтер (`buf lint`)
-- Проверяются breaking changes (в PR)
-- Генерируется код для Go, C++, OpenAPI
-- Код автоматически коммитится обратно в репозиторий
-
-### 2. Автоматическое тегирование
-**Workflow**: [`.github/workflows/auto-tag.yml`](.github/workflows/auto-tag.yml)
-
-При push в `main`:
-- Анализирует commit message
-- Автоматически создает тег по Semantic Versioning
-
-**Правила версионирования:**
-```bash
-git commit -m "something..."
-
-git commit -m "something..."
-
-git commit -m "something..."
+```text
+proto-contracts/
+├── proto/                  # Исходные .proto файлы
+│   └── auth/               # Сервисы
+│       └── v1/             # Версии платформы
+│           └── auth.proto
+├── gen/                    # Сгенерированный код (Go, C++, OpenAPI)
+├── .github/workflows/      # CI/CD pipelines
+├── buf.yaml                # Конфигурация компилятора buf
+└── Makefile                # Команды локальной сборки
 ```
 
-### 3. Создание релизов
-**Workflow**: [`.github/workflows/release.yml`](.github/workflows/release.yml)
+## Автоматизация (GitHub Actions)
 
-При создании тега (`v*.*.*`):
-- Генерирует код
-- Создает архив с контрактами
-- Публикует GitHub Release с changelog
-- Прикрепляет артефакты
+В проекте настроен полный CI/CD цикл генерации и сборки контрактов.
 
+### 1. Генерация кода
+При каждом коммите в ветку `main`, который затрагивает `.proto` файлы:
+1. Запускается линтер `buf lint`.
+2. Код компилируется для языков Go и C++, а также генерируется Swagger документация.
+3. Сгенерированные файлы (`gen/`) автоматически коммитятся обратно в репозиторий ботом.
 
-## Локальная разработка
+### 2. Версионирование
+Теги создаются автоматически на основе ключевых слов в commit message (Спецификация SemVer).
+Используйте следующие префиксы при коммитах:
 
-### Установка инструментов
+* **Patch** (v1.0.0 -> v1.0.1) - Мелкие исправления. Используется по умолчанию.
+  ```bash
+  git commit -m "fix: исправил тип поля в auth.proto"
+  ```
+* **Minor** (v1.0.0 -> v1.1.0) - Добавление нового функционала или методов.
+  ```bash
+  git commit -m "feat: добавил метод GetProfile"
+  ```
+* **Major** (v1.0.0 -> v2.0.0) - Ломающие изменения (удаление полей, методов, изменение типов).
+  ```bash
+  git commit -m "feat: переработан процесс авторизации
+  BREAKING CHANGE: удален метод старой регистрации"
+  ```
+
+### 3. Релизы
+При создании нового тега (см. пункт 2), автоматически создается GitHub Release, который содержит готовый архив `proto-contracts-vX.Y.Z.tar.gz` для подключения в C++ и других языках без установки компилятора.
+
+## Инструкция по локальной разработке
+
+### Требования к окружению
+* Установленный Go 1.22+
+* Утилита Make (предустановлена в Linux/Mac, для Windows требуется MinGW/WSL)
+
+### Установка зависимостей
+Установит компилятор `buf` и плагины для генерации gRPC и Swagger:
 ```bash
 make install-tools
 ```
 
 ### Генерация кода
+После изменения файлов `.proto`, выполните перед коммитом:
 ```bash
 make generate
 ```
 
-### Линтинг
+### Проверки
 ```bash
-make lint
+make lint       # Запуск линтера
+make breaking   # Проверка обратной совместимости
+make format     # Автоформатирование кода
 ```
 
-### Проверка breaking changes
+## Использование в сервисах
+
+### В микросервисах на Golang
+
+1. Скачайте нужную версию модуля:
 ```bash
-make breaking
+go get github.com/BALLUUNN/zenlyProto@v1.0.0
 ```
 
-## Использование в проектах
-
-### Go
-```bash
-go get github.com/YOUR_USERNAME/YOUR_REPO@v1.0.0
-```
-
+2. Импортируйте пакет в коде:
 ```go
 import (
-    authv1 "github.com/YOUR_USERNAME/YOUR_REPO/gen/go/auth/v1"
+    authv1 "github.com/BALLUUNN/zenlyProto/gen/go/auth/v1"
 )
 
-// Используем
-client := authv1.NewAuthServiceClient(conn)
+// Пример использования клиента
+func main() {
+    client := authv1.NewAuthServiceClient(conn)
+    // ...
+}
 ```
 
-### C++
-1. Скачайте release архив
-2. Распакуйте `gen/cpp/` в ваш проект
-3. Добавьте в CMakeLists.txt:
+### В сервисах поверх C++
+
+1. Перейдите на страницу релизов в GitHub.
+2. Скачайте архив для нужной версии.
+3. Распакуйте содержимое папки `gen/cpp/` в директорию вашего проекта.
+4. Подключите файлы в `CMakeLists.txt`:
 ```cmake
 include_directories(${CMAKE_SOURCE_DIR}/gen/cpp)
 ```

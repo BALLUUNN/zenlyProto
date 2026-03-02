@@ -57,16 +57,16 @@ jobs:
       - name: Generate code
         run: buf generate
 
-      - name: Check for changes
-        id: git-check
-        run: |
-          git diff --exit-code gen/ || echo "changed=true" >> $GITHUB_OUTPUT
-
       - name: Commit and push generated code
-        if: steps.git-check.outputs.changed == 'true' && github.event_name == 'push'
+        if: github.event_name == 'push'
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add gen/
-          git commit -m "chore: regenerate proto code [skip ci]"
-          git push
+          if git diff --staged --quiet; then
+            echo "No changes in generated code"
+          else
+            git commit -m "chore: regenerate proto code [skip ci]"
+            git push
+          fi
+
