@@ -1,9 +1,9 @@
 .PHONY: help generate lint breaking clean install-tools
 
-help: ## Показать справку
+help: 
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
 
-install-tools: ## Установить необходимые инструменты
+install-tools: 
 	@echo "Устанавливаем buf..."
 	@go install github.com/bufbuild/buf/cmd/buf@latest
 	@echo "Устанавливаем protoc плагины..."
@@ -11,29 +11,29 @@ install-tools: ## Установить необходимые инструмен
 	@go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
 	@go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway@latest
 	@go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2@latest
-	@echo "✅ Все инструменты установлены"
+	@echo "Все инструменты установлены"
 
-generate: ## Сгенерировать код из proto файлов
+generate: 
 	@echo "Генерируем код..."
 	@buf generate
-	@echo "✅ Код успешно сгенерирован в папку gen/"
+	@echo "Код успешно сгенерирован в папку gen/"
 
-lint: ## Проверить proto файлы на ошибки
+lint: 
 	@echo "Запускаем линтер..."
 	@buf lint
-	@echo "✅ Линтер пройден"
+	@echo "Линтер пройден"
 
-breaking: ## Проверить breaking changes
+breaking: 
 	@echo "Проверяем breaking changes..."
 	@buf breaking --against '.git#branch=main'
-	@echo "✅ Breaking changes не обнаружены"
+	@echo "Breaking changes не обнаружены"
 
-clean: ## Удалить сгенерированный код
+clean:
 	@echo "Удаляем gen/..."
 	@rm -rf gen/
-	@echo "✅ Очистка завершена"
+	@echo "Очистка завершена"
 
-format: ## Форматировать proto файлы
+format: 
 	@echo "Форматируем proto файлы..."
 	@buf format -w
-	@echo "✅ Форматирование завершено"
+	@echo "Форматирование завершено"

@@ -1,16 +1,9 @@
-# Папка для сгенерированного кода
 gen/
 
-# IDE
 .idea/
 .vscode/
 *.swp
 *.swo
 
-# OS
-.DS_Store
-Thumbs.db
-
-# Временные файлы
 *.tmp
 *.log

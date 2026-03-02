@@ -3,7 +3,7 @@ name: Create Release
 on:
   push:
     tags:
-      - 'v*.*.*'  # Триггер на теги типа v1.0.0, v1.2.3
+      - 'v*.*.*'  
 
 jobs:
   release:
@@ -59,18 +59,13 @@ jobs:
           tag_name: ${{ steps.get_version.outputs.VERSION }}
           name: Release ${{ steps.get_version.outputs.VERSION }}
           body: |
-            ## Changes
             ${{ steps.changelog.outputs.CHANGELOG }}
             
-            ## Использование
             
-            ### Go
             ```bash
             go get github.com/YOUR_USERNAME/YOUR_REPO@${{ steps.get_version.outputs.VERSION }}
             ```
             
-            ### C++
-            Скачайте архив и добавьте `gen/cpp` в ваш проект.
           files: |
             release/*.tar.gz
           draft: false

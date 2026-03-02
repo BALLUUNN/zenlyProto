@@ -8,6 +8,7 @@ on:
       - 'proto/**/*.proto'
       - 'buf.yaml'
       - 'buf.gen.yaml'
+      - '.github/workflows/*.yml'
   pull_request:
     paths:
       - 'proto/**/*.proto'

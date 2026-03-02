@@ -2,12 +2,12 @@ version: v2
 modules:
   - path: proto
 deps:
-  - buf.build/googleapis/googleapis  # Google API annotations для REST mapping
+  - buf.build/googleapis/googleapis  
 lint:
   use:
     - DEFAULT
   except:
-    - PACKAGE_VERSION_SUFFIX  # Отключаем требование _v1 суффикса
+    - PACKAGE_VERSION_SUFFIX  
 breaking:
   use:
     - FILE

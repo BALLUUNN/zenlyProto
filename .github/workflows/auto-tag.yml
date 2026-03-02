@@ -6,6 +6,11 @@ on:
       - main
     paths:
       - 'proto/**/*.proto'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'proto/**/*.proto'
 
 jobs:
   tag:
@@ -22,11 +27,9 @@ jobs:
       - name: Get latest tag
         id: get_tag
         run: |
-          # Получаем последний тег, если нет - начинаем с v1.0.0
           LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v1.0.0")
           echo "latest_tag=$LATEST_TAG" >> $GITHUB_OUTPUT
           
-          # Извлекаем версию без 'v'
           VERSION=${LATEST_TAG#v}
           IFS='.' read -r -a VERSION_PARTS <<< "$VERSION"
           
@@ -34,7 +37,6 @@ jobs:
           MINOR=${VERSION_PARTS[1]}
           PATCH=${VERSION_PARTS[2]}
           
-          # Увеличиваем patch версию
           PATCH=$((PATCH + 1))
           
           NEW_TAG="v${MAJOR}.${MINOR}.${PATCH}"
@@ -45,7 +47,6 @@ jobs:
         run: |
           COMMIT_MSG=$(git log -1 --pretty=%B)
           
-          # Проверяем наличие маркеров в commit message
           if [[ "$COMMIT_MSG" == *"BREAKING CHANGE"* ]] || [[ "$COMMIT_MSG" == *"major:"* ]]; then
             echo "bump=major" >> $GITHUB_OUTPUT
           elif [[ "$COMMIT_MSG" == *"feat:"* ]] || [[ "$COMMIT_MSG" == *"minor:"* ]]; then
@@ -83,7 +84,7 @@ jobs:
 
       - name: Create and push tag
         run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
+          git config --local boldakovvova06@gmail.com "github-actions[bot]@users.noreply.github.com"
+          git config --local BALLUUNN "github-actions[bot]"
           git tag ${{ steps.new_version.outputs.new_tag }}
           git push origin ${{ steps.new_version.outputs.new_tag }}
