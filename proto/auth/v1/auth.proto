@@ -1,0 +1,180 @@
+syntax = "proto3";
+
+package auth.v1;
+
+option go_package = "https://github.com/BALLUUNN/zenlyProto/gen/go/auth/v1;authv1";
+
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+service AuthService {
+
+  rpc RegisterInitiate (RegisterInitiateRequest) returns (RegisterInitiateResponse) {
+    option (google.api.http) = {
+      post: "/v1/auth/register/init"
+      body: "*"
+    };
+  }
+
+  rpc RegisterVerify (RegisterVerifyRequest) returns (RegisterVerifyResponse) {
+    option (google.api.http) = {
+      post: "/v1/auth/register/verify"
+      body: "*"
+    };
+  }
+
+  rpc RegisterComplete (RegisterCompleteRequest) returns (RegisterCompleteResponse) {
+    option (google.api.http) = {
+      post: "/v1/auth/register/complete"
+      body: "*"
+    };
+  }
+
+  rpc Login (LoginRequest) returns (LoginResponse) {
+    option (google.api.http) = {
+      post: "/v1/auth/login"
+      body: "*"
+    };
+  }
+
+  rpc Login2FAVerify (Login2FAVerifyRequest) returns (Login2FAVerifyResponse) {
+    option (google.api.http) = {
+      post: "/v1/auth/login/2fa"
+      body: "*"
+    };
+  }
+
+  rpc Refresh (RefreshRequest) returns (RefreshResponse) {
+    option (google.api.http) = {
+      post: "/v1/auth/refresh"
+      body: "*"
+    };
+  }
+
+  rpc Logout (LogoutRequest) returns (LogoutResponse) {
+    option (google.api.http) = {
+      post: "/v1/auth/logout"
+      body: "*"
+    };
+  }
+
+  rpc ForgotPassword (ForgotPasswordRequest) returns (ForgotPasswordResponse) {
+    option (google.api.http) = {
+      post: "/v1/auth/password/forgot"
+      body: "*"
+    };
+  }
+
+  rpc ResetPassword (ResetPasswordRequest) returns (ResetPasswordResponse) {
+    option (google.api.http) = {
+      post: "/v1/auth/password/reset"
+      body: "*"
+    };
+  }
+}
+
+
+message User {
+  string id = 1;                    
+  string username = 2;              
+  string phone_number = 3;          
+  
+  google.protobuf.Timestamp created_at = 4; 
+  
+  bool is_verify = 5;               
+  
+  bool is_active = 6;               
+}
+
+message RegisterInitiateRequest {
+  string phone_number = 1;
+}
+
+message RegisterInitiateResponse {
+  bool success = 1;
+  string message = 2; 
+}
+
+message RegisterVerifyRequest {
+  string phone_number = 1;
+  string code = 2;   
+}
+
+message RegisterVerifyResponse {
+  bool success = 1;
+  string temp_token = 2; 
+  string message = 3;
+}
+
+message RegisterCompleteRequest {
+  string temp_token = 1;
+  string username = 2;
+  string password = 3;
+}
+
+message RegisterCompleteResponse {
+  string user_id = 1;
+  string access_token = 2;
+  string refresh_token = 3;
+  google.protobuf.Timestamp expires_at = 4;
+}
+
+message LoginRequest {
+  string phone_number = 1;
+  string password = 2;
+}
+
+message LoginResponse {
+  string request_id = 1; 
+  string message = 2;
+}
+
+message Login2FAVerifyRequest {
+  string temp_token = 1; 
+  string code = 2;
+}
+
+message Login2FAVerifyResponse {
+  string user_id = 1;
+  string access_token = 2;
+  string refresh_token = 3;
+}
+
+message RefreshRequest {
+  string refresh_token = 1;
+}
+
+message RefreshResponse {
+  string access_token = 1;
+  string refresh_token = 2;
+  string message = 3;
+}
+
+message LogoutRequest {
+  string access_token = 1;
+}
+
+message LogoutResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message ForgotPasswordRequest {
+  string phone_number = 1;
+}
+
+message ForgotPasswordResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message ResetPasswordRequest {
+  string phone_number = 1;
+  string code = 2;
+  string new_password = 3;
+}
+
+message ResetPasswordResponse {
+  bool success = 1;
+  string message = 2;
+}
