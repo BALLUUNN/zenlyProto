@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - develop
     paths:
       - 'proto/**/*.proto'
       - 'buf.yaml'
@@ -12,6 +11,8 @@ on:
   pull_request:
     paths:
       - 'proto/**/*.proto'
+      - 'buf.yaml'
+      - 'buf.gen.yaml'
 
 jobs:
   generate:
@@ -33,7 +34,7 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@v5
         with:
-          go-version: '1.22'
+          go-version: '1.25.3'
 
       - name: Install protoc plugins
         run: |
@@ -41,6 +42,9 @@ jobs:
           go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
           go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway@latest
           go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2@latest
+
+      - name: Buf dep update
+        run: buf dep update
 
       - name: Buf lint
         run: buf lint
@@ -60,8 +64,8 @@ jobs:
       - name: Commit and push generated code
         if: steps.git-check.outputs.changed == 'true' && github.event_name == 'push'
         run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
+          git config --local boldakovvova06@gmail.com "github-actions[bot]@users.noreply.github.com"
+          git config --local BALLUUNN "github-actions[bot]"
           git add gen/
           git commit -m "chore: regenerate proto code [skip ci]"
           git push
