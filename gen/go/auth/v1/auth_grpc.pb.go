@@ -60,6 +60,7 @@ func (c *authServiceClient) RegisterInitiate(ctx context.Context, in *RegisterIn
 	if err != nil {
 		return nil, err
 	}
+	
 	return out, nil
 }
 
