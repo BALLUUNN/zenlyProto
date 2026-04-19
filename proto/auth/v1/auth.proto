@@ -9,40 +9,85 @@ import "google/protobuf/timestamp.proto";
 
 service AuthService {
 
-  rpc RegisterInitiate (RegisterInitiateRequest) returns (RegisterInitiateResponse) {
+  rpc RegisterStart (RegisterStartRequest) returns (RegisterStartResponse) {
     option (google.api.http) = {
       post: "/v1/auth/register/init"
       body: "*"
     };
   }
 
-  rpc RegisterVerify (RegisterVerifyRequest) returns (RegisterVerifyResponse) {
+  rpc RegisterVerifyPhone (RegisterVerifyPhoneRequest) returns (RegisterVerifyPhoneResponse) {
     option (google.api.http) = {
       post: "/v1/auth/register/verify"
       body: "*"
     };
   }
 
-  rpc RegisterComplete (RegisterCompleteRequest) returns (RegisterCompleteResponse) {
+  rpc RegisterResendPhoneCode (RegisterResendPhoneCodeRequest) returns (RegisterResendPhoneCodeResponse) {
     option (google.api.http) = {
-      post: "/v1/auth/register/complete"
+      post: "/v1/auth/register/resend"
       body: "*"
     };
   }
 
-  rpc Login (LoginRequest) returns (LoginResponse) {
+  rpc LoginStart (LoginStartRequest) returns (LoginStartResponse) {
     option (google.api.http) = {
       post: "/v1/auth/login"
       body: "*"
     };
   }
 
-  rpc Login2FAVerify (Login2FAVerifyRequest) returns (Login2FAVerifyResponse) {
+  rpc LoginVerify2FA (LoginVerify2FARequest) returns (LoginVerify2FAResponse) {
     option (google.api.http) = {
       post: "/v1/auth/login/2fa"
       body: "*"
     };
   }
+
+  rpc LoginResend2FACode (LoginResend2FACodeRequest) returns (LoginResend2FACodeResponse) {
+    option (google.api.http) = {
+      post: "/v1/auth/login/2fa/resend"
+      body: "*"
+    };
+  }
+
+  rpc EmailVerifyInitiate (EmailVerifyInitiateRequest) returns (EmailVerifyInitiateResponse) {
+    option (google.api.http) = {
+      post: "/v1/auth/email/verify/init"
+      body: "*"
+    };
+  }
+
+  rpc EmailVerifyConfirm (EmailVerifyConfirmRequest) returns (EmailVerifyConfirmResponse) {
+    option (google.api.http) = {
+      post: "/v1/auth/email/verify/confirm"
+      body: "*"
+    };
+  }
+
+  rpc ChangePhoneStart (ChangePhoneStartRequest) returns (ChangePhoneStartResponse) {
+    option (google.api.http) = {
+      post: "/v1/auth/phone/change/init"
+      body: "*"
+    };
+  }
+
+  rpc ChangePhoneVerify (ChangePhoneVerifyRequest) returns (ChangePhoneVerifyResponse) {
+    option (google.api.http) = {
+      post: "/v1/auth/phone/change/verify"
+      body: "*"
+    };
+  }
+
+  rpc ChangePhoneResendCode (ChangePhoneResendCodeRequest) returns (ChangePhoneResendCodeResponse) {
+    option (google.api.http) = {
+      post: "/v1/auth/phone/change/resend"
+      body: "*"
+    };
+  }
+
+
+  rpc GetUsersByUsername (GetUsersByUsernameRequest) returns (GetUsersByUsernameResponse);
 
   rpc Refresh (RefreshRequest) returns (RefreshResponse) {
     option (google.api.http) = {
@@ -78,66 +123,152 @@ message User {
   string id = 1;                    
   string username = 2;              
   string phone_number = 3;          
-  
   google.protobuf.Timestamp created_at = 4; 
-  
-  bool is_verify = 5;               
-  
-  bool is_active = 6;               
+  bool is_phone_verified = 5;
+  bool is_email_verified = 6;
+  bool is_active = 7;
+  string email = 8;
 }
 
-message RegisterInitiateRequest {
+message RegisterStartRequest {
   string phone_number = 1;
-}
-
-message RegisterInitiateResponse {
-  bool success = 1;
-  string message = 2; 
-}
-
-message RegisterVerifyRequest {
-  string phone_number = 1;
-  string code = 2;   
-}
-
-message RegisterVerifyResponse {
-  bool success = 1;
-  string temp_token = 2; 
-  string message = 3;
-}
-
-message RegisterCompleteRequest {
-  string temp_token = 1;
   string username = 2;
   string password = 3;
 }
 
-message RegisterCompleteResponse {
-  string user_id = 1;
-  string access_token = 2;
-  string refresh_token = 3;
-  google.protobuf.Timestamp expires_at = 4;
+message RegisterStartResponse {
+  string challenge_id = 1;
+  string message = 2; 
+  google.protobuf.Timestamp code_expires_at = 3;
 }
 
-message LoginRequest {
+message RegisterVerifyPhoneRequest {
+  string challenge_id = 1;
+  string code = 2;   
+}
+
+message RegisterVerifyPhoneResponse {
+  bool success = 1;
+  string message = 2;
+  string user_id = 3;
+  string access_token = 4;
+  string refresh_token = 5;
+  google.protobuf.Timestamp expires_at = 6;
+}
+
+message RegisterResendPhoneCodeRequest {
+  string challenge_id = 1;
+}
+
+message RegisterResendPhoneCodeResponse {
+  bool success = 1;
+  string message = 2;
+  google.protobuf.Timestamp code_expires_at = 3;
+}
+
+message LoginStartRequest {
   string phone_number = 1;
   string password = 2;
 }
 
-message LoginResponse {
-  string request_id = 1; 
+message LoginStartResponse {
+  string challenge_id = 1;
   string message = 2;
+  google.protobuf.Timestamp code_expires_at = 3;
 }
 
-message Login2FAVerifyRequest {
-  string temp_token = 1; 
+message LoginVerify2FARequest {
+  string challenge_id = 1;
   string code = 2;
 }
 
-message Login2FAVerifyResponse {
-  string user_id = 1;
-  string access_token = 2;
-  string refresh_token = 3;
+message LoginVerify2FAResponse {
+  bool success = 1;
+  string message = 2;
+  string user_id = 3;
+  string access_token = 4;
+  string refresh_token = 5;
+}
+
+message LoginResend2FACodeRequest {
+  string challenge_id = 1;
+}
+
+message LoginResend2FACodeResponse {
+  bool success = 1;
+  string message = 2;
+  google.protobuf.Timestamp code_expires_at = 3;
+}
+
+message EmailVerifyInitiateRequest {
+  string access_token = 1;
+  string email = 2;
+}
+
+message EmailVerifyInitiateResponse {
+  string verification_id = 1;
+  string message = 2;
+  google.protobuf.Timestamp code_expires_at = 3;
+}
+
+message EmailVerifyConfirmRequest {
+  string access_token = 1;
+  string verification_id = 2;
+  string code = 3;
+}
+
+message EmailVerifyConfirmResponse {
+  bool success = 1;
+  string message = 2;
+  bool is_email_verified = 3;
+}
+
+message ChangePhoneStartRequest {
+  string access_token = 1;
+  string new_phone_number = 2;
+}
+
+message ChangePhoneStartResponse {
+  string challenge_id = 1;
+  string message = 2;
+  google.protobuf.Timestamp code_expires_at = 3;
+}
+
+message ChangePhoneVerifyRequest {
+  string challenge_id = 1;
+  string code = 2;
+}
+
+message ChangePhoneVerifyResponse {
+  bool success = 1;
+  string message = 2;
+  string phone_number = 3;
+}
+
+message ChangePhoneResendCodeRequest {
+  string challenge_id = 1;
+}
+
+message ChangePhoneResendCodeResponse {
+  bool success = 1;
+  string message = 2;
+  google.protobuf.Timestamp code_expires_at = 3;
+}
+
+message GetUserByUsernameRequest {
+  string username = 1;
+}
+
+message GetUserByUsernameResponse {
+  User user = 1;
+}
+
+message GetUsersByUsernamesRequest {
+  repeated string usernames = 1;
+}
+
+message GetUsersByUsernamesResponse {
+  repeated User users = 1;
 }
 
 message RefreshRequest {
@@ -166,6 +297,7 @@ message ForgotPasswordRequest {
 message ForgotPasswordResponse {
   bool success = 1;
   string message = 2;
+  google.protobuf.Timestamp code_expires_at = 3;
 }
 
 message ResetPasswordRequest {
