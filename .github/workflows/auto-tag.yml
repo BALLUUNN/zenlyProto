@@ -84,7 +84,7 @@ jobs:
 
       - name: Create and push tag
         run: |
-          git config --local boldakovvova06@gmail.com "github-actions[bot]@users.noreply.github.com"
-          git config --local BALLUUNN "github-actions[bot]"
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "boldakovvova06@gmail.com"
           git tag ${{ steps.new_version.outputs.new_tag }}
           git push origin ${{ steps.new_version.outputs.new_tag }}
