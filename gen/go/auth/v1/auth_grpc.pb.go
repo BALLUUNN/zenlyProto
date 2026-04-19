@@ -19,26 +19,38 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	AuthService_RegisterInitiate_FullMethodName = "/auth.v1.AuthService/RegisterInitiate"
-	AuthService_RegisterVerify_FullMethodName   = "/auth.v1.AuthService/RegisterVerify"
-	AuthService_RegisterComplete_FullMethodName = "/auth.v1.AuthService/RegisterComplete"
-	AuthService_Login_FullMethodName            = "/auth.v1.AuthService/Login"
-	AuthService_Login2FAVerify_FullMethodName   = "/auth.v1.AuthService/Login2FAVerify"
-	AuthService_Refresh_FullMethodName          = "/auth.v1.AuthService/Refresh"
-	AuthService_Logout_FullMethodName           = "/auth.v1.AuthService/Logout"
-	AuthService_ForgotPassword_FullMethodName   = "/auth.v1.AuthService/ForgotPassword"
-	AuthService_ResetPassword_FullMethodName    = "/auth.v1.AuthService/ResetPassword"
+	AuthService_RegisterStart_FullMethodName           = "/auth.v1.AuthService/RegisterStart"
+	AuthService_RegisterVerifyPhone_FullMethodName     = "/auth.v1.AuthService/RegisterVerifyPhone"
+	AuthService_RegisterResendPhoneCode_FullMethodName = "/auth.v1.AuthService/RegisterResendPhoneCode"
+	AuthService_LoginStart_FullMethodName              = "/auth.v1.AuthService/LoginStart"
+	AuthService_LoginVerify2FA_FullMethodName          = "/auth.v1.AuthService/LoginVerify2FA"
+	AuthService_LoginResend2FACode_FullMethodName      = "/auth.v1.AuthService/LoginResend2FACode"
+	AuthService_EmailVerifyInitiate_FullMethodName     = "/auth.v1.AuthService/EmailVerifyInitiate"
+	AuthService_EmailVerifyConfirm_FullMethodName      = "/auth.v1.AuthService/EmailVerifyConfirm"
+	AuthService_ChangePhoneStart_FullMethodName        = "/auth.v1.AuthService/ChangePhoneStart"
+	AuthService_ChangePhoneVerify_FullMethodName       = "/auth.v1.AuthService/ChangePhoneVerify"
+	AuthService_ChangePhoneResendCode_FullMethodName   = "/auth.v1.AuthService/ChangePhoneResendCode"
+	AuthService_Refresh_FullMethodName                 = "/auth.v1.AuthService/Refresh"
+	AuthService_Logout_FullMethodName                  = "/auth.v1.AuthService/Logout"
+	AuthService_ForgotPassword_FullMethodName          = "/auth.v1.AuthService/ForgotPassword"
+	AuthService_ResetPassword_FullMethodName           = "/auth.v1.AuthService/ResetPassword"
 )
 
 // AuthServiceClient is the client API for AuthService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AuthServiceClient interface {
-	RegisterInitiate(ctx context.Context, in *RegisterInitiateRequest, opts ...grpc.CallOption) (*RegisterInitiateResponse, error)
-	RegisterVerify(ctx context.Context, in *RegisterVerifyRequest, opts ...grpc.CallOption) (*RegisterVerifyResponse, error)
-	RegisterComplete(ctx context.Context, in *RegisterCompleteRequest, opts ...grpc.CallOption) (*RegisterCompleteResponse, error)
-	Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
-	Login2FAVerify(ctx context.Context, in *Login2FAVerifyRequest, opts ...grpc.CallOption) (*Login2FAVerifyResponse, error)
+	RegisterStart(ctx context.Context, in *RegisterStartRequest, opts ...grpc.CallOption) (*RegisterStartResponse, error)
+	RegisterVerifyPhone(ctx context.Context, in *RegisterVerifyPhoneRequest, opts ...grpc.CallOption) (*RegisterVerifyPhoneResponse, error)
+	RegisterResendPhoneCode(ctx context.Context, in *RegisterResendPhoneCodeRequest, opts ...grpc.CallOption) (*RegisterResendPhoneCodeResponse, error)
+	LoginStart(ctx context.Context, in *LoginStartRequest, opts ...grpc.CallOption) (*LoginStartResponse, error)
+	LoginVerify2FA(ctx context.Context, in *LoginVerify2FARequest, opts ...grpc.CallOption) (*LoginVerify2FAResponse, error)
+	LoginResend2FACode(ctx context.Context, in *LoginResend2FACodeRequest, opts ...grpc.CallOption) (*LoginResend2FACodeResponse, error)
+	EmailVerifyInitiate(ctx context.Context, in *EmailVerifyInitiateRequest, opts ...grpc.CallOption) (*EmailVerifyInitiateResponse, error)
+	EmailVerifyConfirm(ctx context.Context, in *EmailVerifyConfirmRequest, opts ...grpc.CallOption) (*EmailVerifyConfirmResponse, error)
+	ChangePhoneStart(ctx context.Context, in *ChangePhoneStartRequest, opts ...grpc.CallOption) (*ChangePhoneStartResponse, error)
+	ChangePhoneVerify(ctx context.Context, in *ChangePhoneVerifyRequest, opts ...grpc.CallOption) (*ChangePhoneVerifyResponse, error)
+	ChangePhoneResendCode(ctx context.Context, in *ChangePhoneResendCodeRequest, opts ...grpc.CallOption) (*ChangePhoneResendCodeResponse, error)
 	Refresh(ctx context.Context, in *RefreshRequest, opts ...grpc.CallOption) (*RefreshResponse, error)
 	Logout(ctx context.Context, in *LogoutRequest, opts ...grpc.CallOption) (*LogoutResponse, error)
 	ForgotPassword(ctx context.Context, in *ForgotPasswordRequest, opts ...grpc.CallOption) (*ForgotPasswordResponse, error)
@@ -53,50 +65,110 @@ func NewAuthServiceClient(cc grpc.ClientConnInterface) AuthServiceClient {
 	return &authServiceClient{cc}
 }
 
-func (c *authServiceClient) RegisterInitiate(ctx context.Context, in *RegisterInitiateRequest, opts ...grpc.CallOption) (*RegisterInitiateResponse, error) {
+func (c *authServiceClient) RegisterStart(ctx context.Context, in *RegisterStartRequest, opts ...grpc.CallOption) (*RegisterStartResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(RegisterInitiateResponse)
-	err := c.cc.Invoke(ctx, AuthService_RegisterInitiate_FullMethodName, in, out, cOpts...)
+	out := new(RegisterStartResponse)
+	err := c.cc.Invoke(ctx, AuthService_RegisterStart_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *authServiceClient) RegisterVerify(ctx context.Context, in *RegisterVerifyRequest, opts ...grpc.CallOption) (*RegisterVerifyResponse, error) {
+func (c *authServiceClient) RegisterVerifyPhone(ctx context.Context, in *RegisterVerifyPhoneRequest, opts ...grpc.CallOption) (*RegisterVerifyPhoneResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(RegisterVerifyResponse)
-	err := c.cc.Invoke(ctx, AuthService_RegisterVerify_FullMethodName, in, out, cOpts...)
+	out := new(RegisterVerifyPhoneResponse)
+	err := c.cc.Invoke(ctx, AuthService_RegisterVerifyPhone_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *authServiceClient) RegisterComplete(ctx context.Context, in *RegisterCompleteRequest, opts ...grpc.CallOption) (*RegisterCompleteResponse, error) {
+func (c *authServiceClient) RegisterResendPhoneCode(ctx context.Context, in *RegisterResendPhoneCodeRequest, opts ...grpc.CallOption) (*RegisterResendPhoneCodeResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(RegisterCompleteResponse)
-	err := c.cc.Invoke(ctx, AuthService_RegisterComplete_FullMethodName, in, out, cOpts...)
+	out := new(RegisterResendPhoneCodeResponse)
+	err := c.cc.Invoke(ctx, AuthService_RegisterResendPhoneCode_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *authServiceClient) Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error) {
+func (c *authServiceClient) LoginStart(ctx context.Context, in *LoginStartRequest, opts ...grpc.CallOption) (*LoginStartResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(LoginResponse)
-	err := c.cc.Invoke(ctx, AuthService_Login_FullMethodName, in, out, cOpts...)
+	out := new(LoginStartResponse)
+	err := c.cc.Invoke(ctx, AuthService_LoginStart_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *authServiceClient) Login2FAVerify(ctx context.Context, in *Login2FAVerifyRequest, opts ...grpc.CallOption) (*Login2FAVerifyResponse, error) {
+func (c *authServiceClient) LoginVerify2FA(ctx context.Context, in *LoginVerify2FARequest, opts ...grpc.CallOption) (*LoginVerify2FAResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(Login2FAVerifyResponse)
-	err := c.cc.Invoke(ctx, AuthService_Login2FAVerify_FullMethodName, in, out, cOpts...)
+	out := new(LoginVerify2FAResponse)
+	err := c.cc.Invoke(ctx, AuthService_LoginVerify2FA_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authServiceClient) LoginResend2FACode(ctx context.Context, in *LoginResend2FACodeRequest, opts ...grpc.CallOption) (*LoginResend2FACodeResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(LoginResend2FACodeResponse)
+	err := c.cc.Invoke(ctx, AuthService_LoginResend2FACode_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authServiceClient) EmailVerifyInitiate(ctx context.Context, in *EmailVerifyInitiateRequest, opts ...grpc.CallOption) (*EmailVerifyInitiateResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(EmailVerifyInitiateResponse)
+	err := c.cc.Invoke(ctx, AuthService_EmailVerifyInitiate_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authServiceClient) EmailVerifyConfirm(ctx context.Context, in *EmailVerifyConfirmRequest, opts ...grpc.CallOption) (*EmailVerifyConfirmResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(EmailVerifyConfirmResponse)
+	err := c.cc.Invoke(ctx, AuthService_EmailVerifyConfirm_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authServiceClient) ChangePhoneStart(ctx context.Context, in *ChangePhoneStartRequest, opts ...grpc.CallOption) (*ChangePhoneStartResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ChangePhoneStartResponse)
+	err := c.cc.Invoke(ctx, AuthService_ChangePhoneStart_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authServiceClient) ChangePhoneVerify(ctx context.Context, in *ChangePhoneVerifyRequest, opts ...grpc.CallOption) (*ChangePhoneVerifyResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ChangePhoneVerifyResponse)
+	err := c.cc.Invoke(ctx, AuthService_ChangePhoneVerify_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authServiceClient) ChangePhoneResendCode(ctx context.Context, in *ChangePhoneResendCodeRequest, opts ...grpc.CallOption) (*ChangePhoneResendCodeResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ChangePhoneResendCodeResponse)
+	err := c.cc.Invoke(ctx, AuthService_ChangePhoneResendCode_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -147,11 +219,17 @@ func (c *authServiceClient) ResetPassword(ctx context.Context, in *ResetPassword
 // All implementations must embed UnimplementedAuthServiceServer
 // for forward compatibility.
 type AuthServiceServer interface {
-	RegisterInitiate(context.Context, *RegisterInitiateRequest) (*RegisterInitiateResponse, error)
-	RegisterVerify(context.Context, *RegisterVerifyRequest) (*RegisterVerifyResponse, error)
-	RegisterComplete(context.Context, *RegisterCompleteRequest) (*RegisterCompleteResponse, error)
-	Login(context.Context, *LoginRequest) (*LoginResponse, error)
-	Login2FAVerify(context.Context, *Login2FAVerifyRequest) (*Login2FAVerifyResponse, error)
+	RegisterStart(context.Context, *RegisterStartRequest) (*RegisterStartResponse, error)
+	RegisterVerifyPhone(context.Context, *RegisterVerifyPhoneRequest) (*RegisterVerifyPhoneResponse, error)
+	RegisterResendPhoneCode(context.Context, *RegisterResendPhoneCodeRequest) (*RegisterResendPhoneCodeResponse, error)
+	LoginStart(context.Context, *LoginStartRequest) (*LoginStartResponse, error)
+	LoginVerify2FA(context.Context, *LoginVerify2FARequest) (*LoginVerify2FAResponse, error)
+	LoginResend2FACode(context.Context, *LoginResend2FACodeRequest) (*LoginResend2FACodeResponse, error)
+	EmailVerifyInitiate(context.Context, *EmailVerifyInitiateRequest) (*EmailVerifyInitiateResponse, error)
+	EmailVerifyConfirm(context.Context, *EmailVerifyConfirmRequest) (*EmailVerifyConfirmResponse, error)
+	ChangePhoneStart(context.Context, *ChangePhoneStartRequest) (*ChangePhoneStartResponse, error)
+	ChangePhoneVerify(context.Context, *ChangePhoneVerifyRequest) (*ChangePhoneVerifyResponse, error)
+	ChangePhoneResendCode(context.Context, *ChangePhoneResendCodeRequest) (*ChangePhoneResendCodeResponse, error)
 	Refresh(context.Context, *RefreshRequest) (*RefreshResponse, error)
 	Logout(context.Context, *LogoutRequest) (*LogoutResponse, error)
 	ForgotPassword(context.Context, *ForgotPasswordRequest) (*ForgotPasswordResponse, error)
@@ -166,20 +244,38 @@ type AuthServiceServer interface {
 // pointer dereference when methods are called.
 type UnimplementedAuthServiceServer struct{}
 
-func (UnimplementedAuthServiceServer) RegisterInitiate(context.Context, *RegisterInitiateRequest) (*RegisterInitiateResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method RegisterInitiate not implemented")
+func (UnimplementedAuthServiceServer) RegisterStart(context.Context, *RegisterStartRequest) (*RegisterStartResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method RegisterStart not implemented")
 }
-func (UnimplementedAuthServiceServer) RegisterVerify(context.Context, *RegisterVerifyRequest) (*RegisterVerifyResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method RegisterVerify not implemented")
+func (UnimplementedAuthServiceServer) RegisterVerifyPhone(context.Context, *RegisterVerifyPhoneRequest) (*RegisterVerifyPhoneResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method RegisterVerifyPhone not implemented")
 }
-func (UnimplementedAuthServiceServer) RegisterComplete(context.Context, *RegisterCompleteRequest) (*RegisterCompleteResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method RegisterComplete not implemented")
+func (UnimplementedAuthServiceServer) RegisterResendPhoneCode(context.Context, *RegisterResendPhoneCodeRequest) (*RegisterResendPhoneCodeResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method RegisterResendPhoneCode not implemented")
 }
-func (UnimplementedAuthServiceServer) Login(context.Context, *LoginRequest) (*LoginResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method Login not implemented")
+func (UnimplementedAuthServiceServer) LoginStart(context.Context, *LoginStartRequest) (*LoginStartResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method LoginStart not implemented")
 }
-func (UnimplementedAuthServiceServer) Login2FAVerify(context.Context, *Login2FAVerifyRequest) (*Login2FAVerifyResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method Login2FAVerify not implemented")
+func (UnimplementedAuthServiceServer) LoginVerify2FA(context.Context, *LoginVerify2FARequest) (*LoginVerify2FAResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method LoginVerify2FA not implemented")
+}
+func (UnimplementedAuthServiceServer) LoginResend2FACode(context.Context, *LoginResend2FACodeRequest) (*LoginResend2FACodeResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method LoginResend2FACode not implemented")
+}
+func (UnimplementedAuthServiceServer) EmailVerifyInitiate(context.Context, *EmailVerifyInitiateRequest) (*EmailVerifyInitiateResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method EmailVerifyInitiate not implemented")
+}
+func (UnimplementedAuthServiceServer) EmailVerifyConfirm(context.Context, *EmailVerifyConfirmRequest) (*EmailVerifyConfirmResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method EmailVerifyConfirm not implemented")
+}
+func (UnimplementedAuthServiceServer) ChangePhoneStart(context.Context, *ChangePhoneStartRequest) (*ChangePhoneStartResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ChangePhoneStart not implemented")
+}
+func (UnimplementedAuthServiceServer) ChangePhoneVerify(context.Context, *ChangePhoneVerifyRequest) (*ChangePhoneVerifyResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ChangePhoneVerify not implemented")
+}
+func (UnimplementedAuthServiceServer) ChangePhoneResendCode(context.Context, *ChangePhoneResendCodeRequest) (*ChangePhoneResendCodeResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ChangePhoneResendCode not implemented")
 }
 func (UnimplementedAuthServiceServer) Refresh(context.Context, *RefreshRequest) (*RefreshResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method Refresh not implemented")
@@ -214,92 +310,200 @@ func RegisterAuthServiceServer(s grpc.ServiceRegistrar, srv AuthServiceServer) {
 	s.RegisterService(&AuthService_ServiceDesc, srv)
 }
 
-func _AuthService_RegisterInitiate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(RegisterInitiateRequest)
+func _AuthService_RegisterStart_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RegisterStartRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AuthServiceServer).RegisterInitiate(ctx, in)
+		return srv.(AuthServiceServer).RegisterStart(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: AuthService_RegisterInitiate_FullMethodName,
+		FullMethod: AuthService_RegisterStart_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AuthServiceServer).RegisterInitiate(ctx, req.(*RegisterInitiateRequest))
+		return srv.(AuthServiceServer).RegisterStart(ctx, req.(*RegisterStartRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AuthService_RegisterVerify_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(RegisterVerifyRequest)
+func _AuthService_RegisterVerifyPhone_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RegisterVerifyPhoneRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AuthServiceServer).RegisterVerify(ctx, in)
+		return srv.(AuthServiceServer).RegisterVerifyPhone(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: AuthService_RegisterVerify_FullMethodName,
+		FullMethod: AuthService_RegisterVerifyPhone_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AuthServiceServer).RegisterVerify(ctx, req.(*RegisterVerifyRequest))
+		return srv.(AuthServiceServer).RegisterVerifyPhone(ctx, req.(*RegisterVerifyPhoneRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AuthService_RegisterComplete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(RegisterCompleteRequest)
+func _AuthService_RegisterResendPhoneCode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RegisterResendPhoneCodeRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AuthServiceServer).RegisterComplete(ctx, in)
+		return srv.(AuthServiceServer).RegisterResendPhoneCode(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: AuthService_RegisterComplete_FullMethodName,
+		FullMethod: AuthService_RegisterResendPhoneCode_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AuthServiceServer).RegisterComplete(ctx, req.(*RegisterCompleteRequest))
+		return srv.(AuthServiceServer).RegisterResendPhoneCode(ctx, req.(*RegisterResendPhoneCodeRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AuthService_Login_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(LoginRequest)
+func _AuthService_LoginStart_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LoginStartRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AuthServiceServer).Login(ctx, in)
+		return srv.(AuthServiceServer).LoginStart(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: AuthService_Login_FullMethodName,
+		FullMethod: AuthService_LoginStart_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AuthServiceServer).Login(ctx, req.(*LoginRequest))
+		return srv.(AuthServiceServer).LoginStart(ctx, req.(*LoginStartRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AuthService_Login2FAVerify_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Login2FAVerifyRequest)
+func _AuthService_LoginVerify2FA_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LoginVerify2FARequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AuthServiceServer).Login2FAVerify(ctx, in)
+		return srv.(AuthServiceServer).LoginVerify2FA(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: AuthService_Login2FAVerify_FullMethodName,
+		FullMethod: AuthService_LoginVerify2FA_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AuthServiceServer).Login2FAVerify(ctx, req.(*Login2FAVerifyRequest))
+		return srv.(AuthServiceServer).LoginVerify2FA(ctx, req.(*LoginVerify2FARequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AuthService_LoginResend2FACode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LoginResend2FACodeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServiceServer).LoginResend2FACode(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AuthService_LoginResend2FACode_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServiceServer).LoginResend2FACode(ctx, req.(*LoginResend2FACodeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AuthService_EmailVerifyInitiate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EmailVerifyInitiateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServiceServer).EmailVerifyInitiate(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AuthService_EmailVerifyInitiate_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServiceServer).EmailVerifyInitiate(ctx, req.(*EmailVerifyInitiateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AuthService_EmailVerifyConfirm_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EmailVerifyConfirmRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServiceServer).EmailVerifyConfirm(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AuthService_EmailVerifyConfirm_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServiceServer).EmailVerifyConfirm(ctx, req.(*EmailVerifyConfirmRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AuthService_ChangePhoneStart_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ChangePhoneStartRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServiceServer).ChangePhoneStart(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AuthService_ChangePhoneStart_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServiceServer).ChangePhoneStart(ctx, req.(*ChangePhoneStartRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AuthService_ChangePhoneVerify_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ChangePhoneVerifyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServiceServer).ChangePhoneVerify(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AuthService_ChangePhoneVerify_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServiceServer).ChangePhoneVerify(ctx, req.(*ChangePhoneVerifyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AuthService_ChangePhoneResendCode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ChangePhoneResendCodeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServiceServer).ChangePhoneResendCode(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AuthService_ChangePhoneResendCode_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServiceServer).ChangePhoneResendCode(ctx, req.(*ChangePhoneResendCodeRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -384,24 +588,48 @@ var AuthService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*AuthServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "RegisterInitiate",
-			Handler:    _AuthService_RegisterInitiate_Handler,
+			MethodName: "RegisterStart",
+			Handler:    _AuthService_RegisterStart_Handler,
 		},
 		{
-			MethodName: "RegisterVerify",
-			Handler:    _AuthService_RegisterVerify_Handler,
+			MethodName: "RegisterVerifyPhone",
+			Handler:    _AuthService_RegisterVerifyPhone_Handler,
 		},
 		{
-			MethodName: "RegisterComplete",
-			Handler:    _AuthService_RegisterComplete_Handler,
+			MethodName: "RegisterResendPhoneCode",
+			Handler:    _AuthService_RegisterResendPhoneCode_Handler,
 		},
 		{
-			MethodName: "Login",
-			Handler:    _AuthService_Login_Handler,
+			MethodName: "LoginStart",
+			Handler:    _AuthService_LoginStart_Handler,
 		},
 		{
-			MethodName: "Login2FAVerify",
-			Handler:    _AuthService_Login2FAVerify_Handler,
+			MethodName: "LoginVerify2FA",
+			Handler:    _AuthService_LoginVerify2FA_Handler,
+		},
+		{
+			MethodName: "LoginResend2FACode",
+			Handler:    _AuthService_LoginResend2FACode_Handler,
+		},
+		{
+			MethodName: "EmailVerifyInitiate",
+			Handler:    _AuthService_EmailVerifyInitiate_Handler,
+		},
+		{
+			MethodName: "EmailVerifyConfirm",
+			Handler:    _AuthService_EmailVerifyConfirm_Handler,
+		},
+		{
+			MethodName: "ChangePhoneStart",
+			Handler:    _AuthService_ChangePhoneStart_Handler,
+		},
+		{
+			MethodName: "ChangePhoneVerify",
+			Handler:    _AuthService_ChangePhoneVerify_Handler,
+		},
+		{
+			MethodName: "ChangePhoneResendCode",
+			Handler:    _AuthService_ChangePhoneResendCode_Handler,
 		},
 		{
 			MethodName: "Refresh",

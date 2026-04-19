@@ -16,14 +16,14 @@
     "application/json"
   ],
   "paths": {
-    "/v1/auth/login": {
+    "/v1/auth/email/verify/confirm": {
       "post": {
-        "operationId": "AuthService_Login",
+        "operationId": "AuthService_EmailVerifyConfirm",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1LoginResponse"
+              "$ref": "#/definitions/v1EmailVerifyConfirmResponse"
             }
           },
           "default": {
@@ -39,7 +39,71 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1LoginRequest"
+              "$ref": "#/definitions/v1EmailVerifyConfirmRequest"
+            }
+          }
+        ],
+        "tags": [
+          "AuthService"
+        ]
+      }
+    },
+    "/v1/auth/email/verify/init": {
+      "post": {
+        "operationId": "AuthService_EmailVerifyInitiate",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1EmailVerifyInitiateResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1EmailVerifyInitiateRequest"
+            }
+          }
+        ],
+        "tags": [
+          "AuthService"
+        ]
+      }
+    },
+    "/v1/auth/login": {
+      "post": {
+        "operationId": "AuthService_LoginStart",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1LoginStartResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1LoginStartRequest"
             }
           }
         ],
@@ -50,12 +114,12 @@
     },
     "/v1/auth/login/2fa": {
       "post": {
-        "operationId": "AuthService_Login2FAVerify",
+        "operationId": "AuthService_LoginVerify2FA",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1Login2FAVerifyResponse"
+              "$ref": "#/definitions/v1LoginVerify2FAResponse"
             }
           },
           "default": {
@@ -71,7 +135,39 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1Login2FAVerifyRequest"
+              "$ref": "#/definitions/v1LoginVerify2FARequest"
+            }
+          }
+        ],
+        "tags": [
+          "AuthService"
+        ]
+      }
+    },
+    "/v1/auth/login/2fa/resend": {
+      "post": {
+        "operationId": "AuthService_LoginResend2FACode",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1LoginResend2FACodeResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1LoginResend2FACodeRequest"
             }
           }
         ],
@@ -176,6 +272,102 @@
         ]
       }
     },
+    "/v1/auth/phone/change/init": {
+      "post": {
+        "operationId": "AuthService_ChangePhoneStart",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ChangePhoneStartResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ChangePhoneStartRequest"
+            }
+          }
+        ],
+        "tags": [
+          "AuthService"
+        ]
+      }
+    },
+    "/v1/auth/phone/change/resend": {
+      "post": {
+        "operationId": "AuthService_ChangePhoneResendCode",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ChangePhoneResendCodeResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ChangePhoneResendCodeRequest"
+            }
+          }
+        ],
+        "tags": [
+          "AuthService"
+        ]
+      }
+    },
+    "/v1/auth/phone/change/verify": {
+      "post": {
+        "operationId": "AuthService_ChangePhoneVerify",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ChangePhoneVerifyResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ChangePhoneVerifyRequest"
+            }
+          }
+        ],
+        "tags": [
+          "AuthService"
+        ]
+      }
+    },
     "/v1/auth/refresh": {
       "post": {
         "operationId": "AuthService_Refresh",
@@ -208,14 +400,14 @@
         ]
       }
     },
-    "/v1/auth/register/complete": {
+    "/v1/auth/register/init": {
       "post": {
-        "operationId": "AuthService_RegisterComplete",
+        "operationId": "AuthService_RegisterStart",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1RegisterCompleteResponse"
+              "$ref": "#/definitions/v1RegisterStartResponse"
             }
           },
           "default": {
@@ -231,7 +423,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1RegisterCompleteRequest"
+              "$ref": "#/definitions/v1RegisterStartRequest"
             }
           }
         ],
@@ -240,14 +432,14 @@
         ]
       }
     },
-    "/v1/auth/register/init": {
+    "/v1/auth/register/resend": {
       "post": {
-        "operationId": "AuthService_RegisterInitiate",
+        "operationId": "AuthService_RegisterResendPhoneCode",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1RegisterInitiateResponse"
+              "$ref": "#/definitions/v1RegisterResendPhoneCodeResponse"
             }
           },
           "default": {
@@ -263,7 +455,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1RegisterInitiateRequest"
+              "$ref": "#/definitions/v1RegisterResendPhoneCodeRequest"
             }
           }
         ],
@@ -274,12 +466,12 @@
     },
     "/v1/auth/register/verify": {
       "post": {
-        "operationId": "AuthService_RegisterVerify",
+        "operationId": "AuthService_RegisterVerifyPhone",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1RegisterVerifyResponse"
+              "$ref": "#/definitions/v1RegisterVerifyPhoneResponse"
             }
           },
           "default": {
@@ -295,7 +487,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1RegisterVerifyRequest"
+              "$ref": "#/definitions/v1RegisterVerifyPhoneRequest"
             }
           }
         ],
@@ -334,6 +526,134 @@
         }
       }
     },
+    "v1ChangePhoneResendCodeRequest": {
+      "type": "object",
+      "properties": {
+        "challengeId": {
+          "type": "string"
+        }
+      }
+    },
+    "v1ChangePhoneResendCodeResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        },
+        "codeExpiresAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "v1ChangePhoneStartRequest": {
+      "type": "object",
+      "properties": {
+        "accessToken": {
+          "type": "string"
+        },
+        "newPhoneNumber": {
+          "type": "string"
+        }
+      }
+    },
+    "v1ChangePhoneStartResponse": {
+      "type": "object",
+      "properties": {
+        "challengeId": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "codeExpiresAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "v1ChangePhoneVerifyRequest": {
+      "type": "object",
+      "properties": {
+        "challengeId": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        }
+      }
+    },
+    "v1ChangePhoneVerifyResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        },
+        "phoneNumber": {
+          "type": "string"
+        }
+      }
+    },
+    "v1EmailVerifyConfirmRequest": {
+      "type": "object",
+      "properties": {
+        "accessToken": {
+          "type": "string"
+        },
+        "verificationId": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        }
+      }
+    },
+    "v1EmailVerifyConfirmResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        },
+        "isEmailVerified": {
+          "type": "boolean"
+        }
+      }
+    },
+    "v1EmailVerifyInitiateRequest": {
+      "type": "object",
+      "properties": {
+        "accessToken": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        }
+      }
+    },
+    "v1EmailVerifyInitiateResponse": {
+      "type": "object",
+      "properties": {
+        "verificationId": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "codeExpiresAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
     "v1ForgotPasswordRequest": {
       "type": "object",
       "properties": {
@@ -350,35 +670,37 @@
         },
         "message": {
           "type": "string"
+        },
+        "codeExpiresAt": {
+          "type": "string",
+          "format": "date-time"
         }
       }
     },
-    "v1Login2FAVerifyRequest": {
+    "v1LoginResend2FACodeRequest": {
       "type": "object",
       "properties": {
-        "tempToken": {
-          "type": "string"
-        },
-        "code": {
+        "challengeId": {
           "type": "string"
         }
       }
     },
-    "v1Login2FAVerifyResponse": {
+    "v1LoginResend2FACodeResponse": {
       "type": "object",
       "properties": {
-        "userId": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
           "type": "string"
         },
-        "accessToken": {
-          "type": "string"
-        },
-        "refreshToken": {
-          "type": "string"
+        "codeExpiresAt": {
+          "type": "string",
+          "format": "date-time"
         }
       }
     },
-    "v1LoginRequest": {
+    "v1LoginStartRequest": {
       "type": "object",
       "properties": {
         "phoneNumber": {
@@ -389,13 +711,48 @@
         }
       }
     },
-    "v1LoginResponse": {
+    "v1LoginStartResponse": {
       "type": "object",
       "properties": {
-        "requestId": {
+        "challengeId": {
           "type": "string"
         },
         "message": {
+          "type": "string"
+        },
+        "codeExpiresAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "v1LoginVerify2FARequest": {
+      "type": "object",
+      "properties": {
+        "challengeId": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        }
+      }
+    },
+    "v1LoginVerify2FAResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        },
+        "userId": {
+          "type": "string"
+        },
+        "accessToken": {
+          "type": "string"
+        },
+        "refreshToken": {
           "type": "string"
         }
       }
@@ -441,10 +798,33 @@
         }
       }
     },
-    "v1RegisterCompleteRequest": {
+    "v1RegisterResendPhoneCodeRequest": {
       "type": "object",
       "properties": {
-        "tempToken": {
+        "challengeId": {
+          "type": "string"
+        }
+      }
+    },
+    "v1RegisterResendPhoneCodeResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        },
+        "codeExpiresAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "v1RegisterStartRequest": {
+      "type": "object",
+      "properties": {
+        "phoneNumber": {
           "type": "string"
         },
         "username": {
@@ -455,9 +835,41 @@
         }
       }
     },
-    "v1RegisterCompleteResponse": {
+    "v1RegisterStartResponse": {
       "type": "object",
       "properties": {
+        "challengeId": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "codeExpiresAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "v1RegisterVerifyPhoneRequest": {
+      "type": "object",
+      "properties": {
+        "challengeId": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        }
+      }
+    },
+    "v1RegisterVerifyPhoneResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        },
         "userId": {
           "type": "string"
         },
@@ -470,50 +882,6 @@
         "expiresAt": {
           "type": "string",
           "format": "date-time"
-        }
-      }
-    },
-    "v1RegisterInitiateRequest": {
-      "type": "object",
-      "properties": {
-        "phoneNumber": {
-          "type": "string"
-        }
-      }
-    },
-    "v1RegisterInitiateResponse": {
-      "type": "object",
-      "properties": {
-        "success": {
-          "type": "boolean"
-        },
-        "message": {
-          "type": "string"
-        }
-      }
-    },
-    "v1RegisterVerifyRequest": {
-      "type": "object",
-      "properties": {
-        "phoneNumber": {
-          "type": "string"
-        },
-        "code": {
-          "type": "string"
-        }
-      }
-    },
-    "v1RegisterVerifyResponse": {
-      "type": "object",
-      "properties": {
-        "success": {
-          "type": "boolean"
-        },
-        "tempToken": {
-          "type": "string"
-        },
-        "message": {
-          "type": "string"
         }
       }
     },
