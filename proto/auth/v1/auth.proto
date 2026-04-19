@@ -87,7 +87,6 @@ service AuthService {
   }
 
 
-  rpc GetUsersByUsername (GetUsersByUsernameRequest) returns (GetUsersByUsernameResponse);
 
   rpc Refresh (RefreshRequest) returns (RefreshResponse) {
     option (google.api.http) = {
@@ -255,21 +254,6 @@ message ChangePhoneResendCodeResponse {
   google.protobuf.Timestamp code_expires_at = 3;
 }
 
-message GetUserByUsernameRequest {
-  string username = 1;
-}
-
-message GetUserByUsernameResponse {
-  User user = 1;
-}
-
-message GetUsersByUsernamesRequest {
-  repeated string usernames = 1;
-}
-
-message GetUsersByUsernamesResponse {
-  repeated User users = 1;
-}
 
 message RefreshRequest {
   string refresh_token = 1;
