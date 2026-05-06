@@ -59,7 +59,7 @@ jobs:
           tar -czf release/proto-contracts-${{ steps.get_version.outputs.FILE_VERSION }}.tar.gz gen/ proto/
 
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ steps.get_version.outputs.VERSION }}
           name: Release ${{ steps.get_version.outputs.VERSION }}
