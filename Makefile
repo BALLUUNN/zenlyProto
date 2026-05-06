@@ -14,9 +14,15 @@ install-tools:
 	@echo "Все инструменты установлены"
 
 generate: 
+	@echo "Обновляем зависимости buf.lock..."
+	@buf dep update
 	@echo "Генерируем код..."
 	@buf generate
-	@echo "Код успешно сгенерирован в папку gen/"
+	@echo "Собираем документацию..."
+	@mkdir -p docs
+	@cp gen/openapiv2/api.swagger.json docs/api.swagger.json 2>/dev/null || true
+	@sed -i 's|../gen/openapiv2/api.swagger.json|api.swagger.json|g' docs/index.html 2>/dev/null || true
+	@echo "Код и документация успешно сгенерированы!"
 
 lint: 
 	@echo "Запускаем линтер..."

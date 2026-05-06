@@ -59,27 +59,22 @@ jobs:
 
       - name: Buf breaking change detection
         if: github.event_name == 'pull_request'
-        continue-on-error: true # Временно, пока в main не появится buf.lock
+        continue-on-error: true 
         run: buf breaking --against '.git#branch=origin/main'
 
       - name: Generate code
         run: buf generate
 
-      - name: Commit and push generated code
-        if: github.event_name == 'push'
+      - name: Verify no uncommitted changes
+        if: github.event_name == 'pull_request'
+        continue-on-error: true
         run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          
           cp gen/openapiv2/api.swagger.json docs/api.swagger.json 2>/dev/null || true
-          
           sed -i 's|../gen/openapiv2/api.swagger.json|api.swagger.json|g' docs/index.html 2>/dev/null || true
-          
           git add gen/ docs/ buf.lock
-          if git diff --staged --quiet; then
-            echo "No changes in generated code"
-          else
-            git commit -m "chore: regenerate proto code [skip ci]"
-            git push
+          if ! git diff --staged --quiet; then
+            echo "Error: Found uncommitted generated files. Please run 'make generate' locally and commit the result."
+            git diff --staged
+            exit 1
           fi
 
