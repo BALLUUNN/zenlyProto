@@ -1,4 +1,4 @@
-#BLNN Protobuf Contracts
+## BLNN Protobuf Contracts
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Format & Lint](https://img.shields.io/badge/Buf-Lint_&_Format-brightgreen.svg)](https://buf.build/)
