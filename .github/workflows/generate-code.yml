@@ -52,9 +52,14 @@ jobs:
       - name: Buf lint
         run: buf lint
 
+      - name: Fetch repository history
+        if: github.event_name == 'pull_request'
+        run: git fetch --no-tags --prune --depth=1 origin +refs/heads/main:refs/remotes/origin/main
+
       - name: Buf breaking change detection
         if: github.event_name == 'pull_request'
-        run: buf breaking --against '.git#branch=main'
+        continue-on-error: true # Временно, пока в main не появится buf.lock
+        run: buf breaking --against '.git#branch=origin/main'
 
       - name: Generate code
         run: buf generate
@@ -64,7 +69,7 @@ jobs:
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git add gen/
+          git add gen/ docs/ buf.lock
           if git diff --staged --quiet; then
             echo "No changes in generated code"
           else
