@@ -3,7 +3,7 @@ name: Create Release
 on:
   push:
     tags:
-      - 'v*.*.*'  
+      - '*/v*.*.*'  
 
 jobs:
   release:
@@ -39,7 +39,12 @@ jobs:
 
       - name: Get version from tag
         id: get_version
-        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+        run: |
+          TAG_NAME=${GITHUB_REF#refs/tags/}
+          # Заменяем слеши на тире для формирования имени файла
+          FILE_VERSION=${TAG_NAME//\//-}
+          echo "VERSION=$TAG_NAME" >> $GITHUB_OUTPUT
+          echo "FILE_VERSION=$FILE_VERSION" >> $GITHUB_OUTPUT
 
       - name: Generate changelog
         id: changelog
@@ -51,7 +56,7 @@ jobs:
       - name: Create Release Archive
         run: |
           mkdir -p release
-          tar -czf release/proto-contracts-${{ steps.get_version.outputs.VERSION }}.tar.gz gen/ proto/
+          tar -czf release/proto-contracts-${{ steps.get_version.outputs.FILE_VERSION }}.tar.gz gen/ proto/
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
@@ -61,9 +66,8 @@ jobs:
           body: |
             ${{ steps.changelog.outputs.CHANGELOG }}
             
-            
             ```bash
-            go get github.com/YOUR_USERNAME/YOUR_REPO@${{ steps.get_version.outputs.VERSION }}
+            go get github.com/BALLUUNN/zenlyProto@${{ steps.get_version.outputs.VERSION }}
             ```
             
           files: |
