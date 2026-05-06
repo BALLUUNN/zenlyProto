@@ -52,11 +52,13 @@ jobs:
       - name: Buf lint
         run: buf lint
 
+      - name: Fetch repository history
+        if: github.event_name == 'pull_request'
+        run: git fetch --no-tags --prune --depth=1 origin +refs/heads/main:refs/remotes/origin/main
+
       - name: Buf breaking change detection
         if: github.event_name == 'pull_request'
-        uses: bufbuild/buf-breaking-action@v1
-        with:
-          against: 'https://github.com/${{ github.repository }}.git#branch=main'
+        run: buf breaking --against '.git#branch=origin/main'
 
       - name: Generate code
         run: buf generate
