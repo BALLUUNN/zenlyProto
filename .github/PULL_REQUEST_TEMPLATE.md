@@ -1,17 +1,17 @@
-## Описание изменений
-Кратко опишите, какие контракты были изменены, добавлены или удалены.
+## Description of Changes
+Briefly describe what contracts were changed, added, or removed.
 
 - 
 - 
 
-## Тип изменений
-Убедитесь, что заголовок PR и коммиты имеют правильный префикс, так как от этого зависит авто-тег (SemVer):
-- [ ] `fix:` (Patch: 1.0.1) - исправление опечатки, комментариев, не ломающее изменение
-- [ ] `feat:` (Minor: 1.1.0) - новый RPC метод, новое опциональное поле
-- [ ] `BREAKING CHANGE:` или `major:` (Major: 2.0.0) - удаление поля/метода, изменение типа существующего поля
+## Type of Change
+Ensure your PR title and commits have the correct prefix, as this triggers the auto-tagging (SemVer):
+- [ ] `fix:` (Patch: 1.0.1) - typo/comment fix, non-breaking change
+- [ ] `feat:` (Minor: 1.1.0) - new RPC method, new optional field
+- [ ] `BREAKING CHANGE:` or `major:` (Major: 2.0.0) - deleting a field/method, changing a field type
 
-## Чек-лист
-- [ ] Локально выполнен `make generate` и сгенерированный код добавлен в этот PR
-- [ ] Локально выполнен `make lint` и нет ошибок
-- [ ] Изменения обратно совместимы (или это специально major-релиз)
-- [ ] Добавлены/обновлены комментарии к новым полям и методам в `.proto`
+## Checklist
+- [ ] `make generate` was run locally and the generated code is included in this PR
+- [ ] `make lint` was run locally and passed without errors
+- [ ] Changes are backward compatible (or this is explicitly a major release)
+- [ ] Added/updated comments for new fields and methods in `.proto` files
