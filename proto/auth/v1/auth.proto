@@ -9,6 +9,8 @@ import "google/protobuf/timestamp.proto";
 
 service AuthService {
 
+  // Initiates the user registration process by accepting basic details such as phone number, username, and password.
+  // Creates a registration challenge and securely triggers an SMS verification code to confirm phone ownership.
   rpc RegisterStart (RegisterStartRequest) returns (RegisterStartResponse) {
     option (google.api.http) = {
       post: "/v1/auth/register/init"
@@ -16,6 +18,8 @@ service AuthService {
     };
   }
 
+  // Verifies the SMS code linked to the registration challenge.
+  // Completes registration, activates the account, and returns tokens if successful.
   rpc RegisterVerifyPhone (RegisterVerifyPhoneRequest) returns (RegisterVerifyPhoneResponse) {
     option (google.api.http) = {
       post: "/v1/auth/register/verify"
@@ -23,6 +27,8 @@ service AuthService {
     };
   }
 
+  // Resends the registration SMS code for an existing challenge.
+  // Updates the expiration time for the verification code.
   rpc RegisterResendPhoneCode (RegisterResendPhoneCodeRequest) returns (RegisterResendPhoneCodeResponse) {
     option (google.api.http) = {
       post: "/v1/auth/register/resend"
@@ -30,6 +36,8 @@ service AuthService {
     };
   }
 
+  // Initiates the login flow with phone number and password.
+  // Creates a login challenge and sends a 2FA code via SMS.
   rpc LoginStart (LoginStartRequest) returns (LoginStartResponse) {
     option (google.api.http) = {
       post: "/v1/auth/login"
@@ -37,6 +45,8 @@ service AuthService {
     };
   }
 
+  // Verifies the 2FA code for the login challenge.
+  // Issues access and refresh tokens upon successful verification.
   rpc LoginVerify2FA (LoginVerify2FARequest) returns (LoginVerify2FAResponse) {
     option (google.api.http) = {
       post: "/v1/auth/login/2fa"
@@ -44,6 +54,8 @@ service AuthService {
     };
   }
 
+  // Resends the 2FA code for the active login challenge.
+  // Extends the validity window for the code.
   rpc LoginResend2FACode (LoginResend2FACodeRequest) returns (LoginResend2FACodeResponse) {
     option (google.api.http) = {
       post: "/v1/auth/login/2fa/resend"
@@ -51,6 +63,8 @@ service AuthService {
     };
   }
 
+  // Initiates email verification for an authenticated user.
+  // Sends a verification code to the provided email address.
   rpc EmailVerifyInitiate (EmailVerifyInitiateRequest) returns (EmailVerifyInitiateResponse) {
     option (google.api.http) = {
       post: "/v1/auth/email/verify/init"
@@ -58,6 +72,8 @@ service AuthService {
     };
   }
 
+  // Confirms email verification using the email code and verification id.
+  // Marks the email as verified if the code is valid and unexpired.
   rpc EmailVerifyConfirm (EmailVerifyConfirmRequest) returns (EmailVerifyConfirmResponse) {
     option (google.api.http) = {
       post: "/v1/auth/email/verify/confirm"
@@ -65,6 +81,8 @@ service AuthService {
     };
   }
 
+  // Initiates the phone number change process for an authenticated user.
+  // Sends a verification code to the new phone number.
   rpc ChangePhoneStart (ChangePhoneStartRequest) returns (ChangePhoneStartResponse) {
     option (google.api.http) = {
       post: "/v1/auth/phone/change/init"
@@ -72,6 +90,8 @@ service AuthService {
     };
   }
 
+  // Verifies the new phone number using the received SMS code.
+  // Applies the phone change on success.
   rpc ChangePhoneVerify (ChangePhoneVerifyRequest) returns (ChangePhoneVerifyResponse) {
     option (google.api.http) = {
       post: "/v1/auth/phone/change/verify"
@@ -79,6 +99,8 @@ service AuthService {
     };
   }
 
+  // Resends the verification code for an existing phone change challenge.
+  // Updates the expiration time for the code.
   rpc ChangePhoneResendCode (ChangePhoneResendCodeRequest) returns (ChangePhoneResendCodeResponse) {
     option (google.api.http) = {
       post: "/v1/auth/phone/change/resend"
@@ -86,8 +108,8 @@ service AuthService {
     };
   }
 
-
-
+  // Refreshes the access token using a valid refresh token.
+  // Returns a new access token and rotates the refresh token.
   rpc Refresh (RefreshRequest) returns (RefreshResponse) {
     option (google.api.http) = {
       post: "/v1/auth/refresh"
@@ -95,6 +117,8 @@ service AuthService {
     };
   }
 
+  // Logs out the user by terminating the current session.
+  // Invalidates the provided access token and related session state.
   rpc Logout (LogoutRequest) returns (LogoutResponse) {
     option (google.api.http) = {
       post: "/v1/auth/logout"
@@ -102,6 +126,8 @@ service AuthService {
     };
   }
 
+  // Initiates password recovery for a phone number.
+  // Sends a recovery code to the user's phone.
   rpc ForgotPassword (ForgotPasswordRequest) returns (ForgotPasswordResponse) {
     option (google.api.http) = {
       post: "/v1/auth/password/forgot"
@@ -109,6 +135,8 @@ service AuthService {
     };
   }
 
+  // Resets the password using the recovery code.
+  // Applies the new password if the code is valid and unexpired.
   rpc ResetPassword (ResetPasswordRequest) returns (ResetPasswordResponse) {
     option (google.api.http) = {
       post: "/v1/auth/password/reset"
@@ -118,6 +146,8 @@ service AuthService {
 }
 
 
+// Represents a user profile in the system.
+// Contains public profile fields, verification flags, and timestamps.
 message User {
   string id = 1;                    
   string username = 2;              
@@ -129,23 +159,31 @@ message User {
   string email = 8;
 }
 
+// Request to start registration.
+// Includes basic identity and credential information for the new user.
 message RegisterStartRequest {
   string phone_number = 1;
   string username = 2;
   string password = 3;
 }
 
+// Response after starting registration.
+// Returns a challenge id and the expiration time for the SMS code.
 message RegisterStartResponse {
   string challenge_id = 1;
   string message = 2; 
   google.protobuf.Timestamp code_expires_at = 3;
 }
 
+// Request to verify phone during registration.
+// Uses the challenge id and the SMS code received by the user.
 message RegisterVerifyPhoneRequest {
   string challenge_id = 1;
   string code = 2;   
 }
 
+// Response after successful phone verification.
+// Returns tokens for the new session and basic user identifiers.
 message RegisterVerifyPhoneResponse {
   bool success = 1;
   string message = 2;
@@ -155,32 +193,44 @@ message RegisterVerifyPhoneResponse {
   google.protobuf.Timestamp expires_at = 6;
 }
 
+// Request to resend registration phone code.
+// Requires an existing registration challenge id.
 message RegisterResendPhoneCodeRequest {
   string challenge_id = 1;
 }
 
+// Response after resending registration phone code.
+// Returns a new expiration time for the verification code.
 message RegisterResendPhoneCodeResponse {
   bool success = 1;
   string message = 2;
   google.protobuf.Timestamp code_expires_at = 3;
 }
 
+// Request to initiate login.
+// Includes the user's phone number and password.
 message LoginStartRequest {
   string phone_number = 1;
   string password = 2;
 }
 
+// Response after starting login.
+// Returns a challenge id for 2FA and its expiration time.
 message LoginStartResponse {
   string challenge_id = 1;
   string message = 2;
   google.protobuf.Timestamp code_expires_at = 3;
 }
 
+// Request to verify 2FA code during login.
+// Uses the challenge id and the SMS code.
 message LoginVerify2FARequest {
   string challenge_id = 1;
   string code = 2;
 }
 
+// Response after successful 2FA verification.
+// Returns tokens for the session and the user id.
 message LoginVerify2FAResponse {
   bool success = 1;
   string message = 2;
@@ -189,107 +239,146 @@ message LoginVerify2FAResponse {
   string refresh_token = 5;
 }
 
+// Request to resend 2FA code during login.
+// Requires the login challenge id.
 message LoginResend2FACodeRequest {
   string challenge_id = 1;
 }
 
+// Response after resending 2FA code.
+// Returns the updated expiration time.
 message LoginResend2FACodeResponse {
   bool success = 1;
   string message = 2;
   google.protobuf.Timestamp code_expires_at = 3;
 }
 
+// Request to start email verification.
+// Requires a valid access token and the email to verify.
 message EmailVerifyInitiateRequest {
   string access_token = 1;
   string email = 2;
 }
 
+// Response after starting email verification.
+// Returns a verification id and the code expiration time.
 message EmailVerifyInitiateResponse {
   string verification_id = 1;
   string message = 2;
   google.protobuf.Timestamp code_expires_at = 3;
 }
 
+// Request to confirm email verification.
+// Uses the verification id, code, and access token.
 message EmailVerifyConfirmRequest {
   string access_token = 1;
   string verification_id = 2;
   string code = 3;
 }
 
+// Response after confirming email verification.
+// Indicates whether the email is now marked as verified.
 message EmailVerifyConfirmResponse {
   bool success = 1;
   string message = 2;
   bool is_email_verified = 3;
 }
 
+// Request to start phone change.
+// Requires a valid access token and the new phone number.
 message ChangePhoneStartRequest {
   string access_token = 1;
   string new_phone_number = 2;
 }
 
+// Response after starting phone change.
+// Returns a challenge id and the code expiration time.
 message ChangePhoneStartResponse {
   string challenge_id = 1;
   string message = 2;
   google.protobuf.Timestamp code_expires_at = 3;
 }
 
+// Request to verify new phone number.
+// Uses the phone change challenge id and SMS code.
 message ChangePhoneVerifyRequest {
   string challenge_id = 1;
   string code = 2;
 }
 
+// Response after successful phone change.
+// Returns the newly confirmed phone number.
 message ChangePhoneVerifyResponse {
   bool success = 1;
   string message = 2;
   string phone_number = 3;
 }
 
+// Request to resend phone change code.
+// Requires the phone change challenge id.
 message ChangePhoneResendCodeRequest {
   string challenge_id = 1;
 }
 
+// Response after resending phone change code.
+// Returns the updated expiration time.
 message ChangePhoneResendCodeResponse {
   bool success = 1;
   string message = 2;
   google.protobuf.Timestamp code_expires_at = 3;
 }
 
-
+// Request to refresh tokens.
+// Requires a valid refresh token from a previous session.
 message RefreshRequest {
   string refresh_token = 1;
 }
 
+// Response with new access and refresh tokens.
+// Provides the rotated refresh token and a human-readable message.
 message RefreshResponse {
   string access_token = 1;
   string refresh_token = 2;
   string message = 3;
 }
 
+// Request to log out.
+// Requires the access token to invalidate the session.
 message LogoutRequest {
   string access_token = 1;
 }
 
+// Response after log out.
+// Indicates whether the session was successfully terminated.
 message LogoutResponse {
   bool success = 1;
   string message = 2;
 }
 
+// Request to start password recovery.
+// Sends a recovery code to the provided phone number.
 message ForgotPasswordRequest {
   string phone_number = 1;
 }
 
+// Response after starting password recovery.
+// Returns the expiration time for the recovery code.
 message ForgotPasswordResponse {
   bool success = 1;
   string message = 2;
   google.protobuf.Timestamp code_expires_at = 3;
 }
 
+// Request to reset password.
+// Uses the phone number, recovery code, and new password.
 message ResetPasswordRequest {
   string phone_number = 1;
   string code = 2;
   string new_password = 3;
 }
 
+// Response after successful password reset.
+// Indicates whether the password was updated.
 message ResetPasswordResponse {
   bool success = 1;
   string message = 2;
