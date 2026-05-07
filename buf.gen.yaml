@@ -11,6 +11,3 @@ plugins:
     opt: paths=source_relative,generate_unbound_methods=true
   - plugin: buf.build/grpc-ecosystem/openapiv2
     out: gen/openapiv2
-  - plugin: buf.build/community/pseudomuto-doc
-    out: docs
-    opt: html,index.html
